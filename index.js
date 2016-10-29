@@ -49,7 +49,7 @@ module.exports = (input, opts) => {
 			},
 			{
 				title: 'Installing dependencies',
-				task: () => exec('npm', ['install'])
+				task: () => exec('yarn')
 			}
 		]);
 	}
