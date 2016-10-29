@@ -16,6 +16,7 @@ const cli = meow(`
 	  --skip-cleanup  Skips cleanup of node_modules
 	  --yolo          Skips cleanup and testing
 	  --tag           Publish under a given dist-tag
+		--dist					Publish from the dist directory
 
 	Examples
 	  $ np patch
