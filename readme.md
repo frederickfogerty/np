@@ -1,6 +1,6 @@
-# np [![Build Status](https://travis-ci.org/sindresorhus/np.svg?branch=master)](https://travis-ci.org/sindresorhus/np)
+# ynp [![Build Status](https://travis-ci.org/sindresorhus/np.svg?branch=master)](https://travis-ci.org/sindresorhus/np)
 
-> A better `npm publish`
+> A better `np`, with [yarn](https://github.com/yarnpkg/yarn).
 
 <img src="screenshot.gif" width="688">
 

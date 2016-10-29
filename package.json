@@ -1,9 +1,9 @@
 {
-  "name": "@fredfogerty/np",
+  "name": "ynp",
   "version": "2.9.0",
-  "description": "A better `npm publish`",
+  "description": "A better `yarn publish`",
   "license": "MIT",
-  "repository": "sindresorhus/np",
+  "repository": "frederickfogerty/np",
   "author": {
     "name": "Sindre Sorhus",
     "email": "sindresorhus@gmail.com",
