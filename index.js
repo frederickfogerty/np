@@ -10,6 +10,7 @@ const readPkgUp = require('read-pkg-up');
 const prerequisiteTasks = require('./lib/prerequisite');
 const gitTasks = require('./lib/git');
 const fs = require('fs-extra-promise');
+const path = require('path');
 
 const exec = (cmd, args) => {
 	// Use `Observable` support if merged https://github.com/sindresorhus/execa/pull/26
@@ -23,8 +24,8 @@ const exec = (cmd, args) => {
 
 const DIST_DIR = 'dist';
 
-function copyToDist(path) {
-	return fs.copyAsync(path, DIST_DIR);
+function copyToDist(filePath) {
+	return fs.copyAsync(filePath, path.join(DIST_DIR, filePath)).catch(() => Promise.resolve());
 }
 
 module.exports = (input, opts) => {
@@ -83,7 +84,7 @@ module.exports = (input, opts) => {
 				}
 			},
 			task: () => {
-				const publish = () => exec('npm', ['publish'].aconcat(opts.tag ? ['--tag', opts.tag] : []))
+				const publish = () => exec('npm', ['publish'].concat(opts.tag ? ['--tag', opts.tag] : []))
 				if (publishFromDist) {
 					const tasks = [
 						{
