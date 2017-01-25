@@ -9,12 +9,9 @@ const streamToObservable = require('stream-to-observable');
 const readPkgUp = require('read-pkg-up');
 const prerequisiteTasks = require('./lib/prerequisite');
 const gitTasks = require('./lib/git');
-<<<<<<< HEAD
 const fs = require('fs-extra-promise');
 const path = require('path');
-=======
 const util = require('./lib/util');
->>>>>>> 3ca9681515fe4709cdd01d87509ce8cc99511bf9
 
 const exec = (cmd, args) => {
 	// Use `Observable` support if merged https://github.com/sindresorhus/execa/pull/26
