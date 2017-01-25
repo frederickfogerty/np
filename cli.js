@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 'use strict';
+const logSymbols = require('log-symbols');
 const meow = require('meow');
 const updateNotifier = require('update-notifier');
+const version = require('./lib/version');
+const ui = require('./lib/ui');
 const np = require('./');
 
 const cli = meow(`
@@ -9,33 +12,49 @@ const cli = meow(`
 	  $ np <version>
 
 	  Version can be:
-	    patch | minor | major | prepatch | preminor | premajor | prerelease | 1.2.3
+	    ${version.SEMVER_INCREMENTS.join(' | ')} | 1.2.3
 
 	Options
-	  --any-branch    Allow publishing from any branch
-	  --skip-cleanup  Skips cleanup of node_modules
-	  --yolo          Skips cleanup and testing
-	  --tag           Publish under a given dist-tag
+	  --any-branch  Allow publishing from any branch
+	  --no-cleanup  Skips cleanup of node_modules
+	  --yolo        Skips cleanup and testing
+	  --no-publish  Skips publishing
+	  --tag         Publish under a given dist-tag
 		--dist					Publish from the dist directory
 
 	Examples
+	  $ np
 	  $ np patch
 	  $ np 1.0.2
 	  $ np 1.0.2-beta.3 --tag=beta
 `);
 
-updateNotifier({pkg: cli.pkg}).notify();
+updateNotifier({ pkg: cli.pkg }).notify();
 
-if (cli.input.length === 0) {
-	console.error('Specify a version\n\nExample: $ np patch');
-	process.exit(1);
-}
+Promise
+	.resolve()
+	.then(() => {
+		if (cli.input.length > 0) {
+			return Object.assign({}, cli.flags, {
+				confirm: true,
+				version: cli.input[0]
+			});
+		}
 
-np(cli.input[0], cli.flags)
+		return ui(cli.flags);
+	})
+	.then(options => {
+		if (!options.confirm) {
+			process.exit(0);
+		}
+
+		return options;
+	})
+	.then(options => np(options.version, options))
 	.then(pkg => {
-		console.log(`\n ${pkg.name} ${pkg.version} published`);
+		console.log(`\n ${pkg.name} ${pkg.version} published 🎉`);
 	})
 	.catch(err => {
-		console.error(`\n${err.message}`);
+		console.error(`\n${logSymbols.error} ${err.message}`);
 		process.exit(1);
 	});

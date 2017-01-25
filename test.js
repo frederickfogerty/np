@@ -2,7 +2,7 @@ import test from 'ava';
 import m from './';
 
 test('version is invalid', t => {
-	const message = 'Version should be either major, minor, patch, premajor, preminor, prepatch, prerelease, or a valid semver version.';
+	const message = 'Version should be either patch, minor, major, prepatch, preminor, premajor, prerelease, or a valid semver version.';
 	t.throws(m('foo'), message);
 	t.throws(m('4.x.3'), message);
 });
@@ -17,7 +17,7 @@ test('version is pre-release', t => {
 	t.throws(m('10.0.0-beta'), message);
 });
 
-test('foo', t => {
-	t.throws(m('1.0.0'), /New version `1\.0\.0` should be higher than current version `\d\.\d\.\d`/);
-	t.throws(m('1.0.0-beta'), /New version `1\.0\.0-beta` should be higher than current version `\d\.\d\.\d`/);
+test('errors on too low version', t => {
+	t.throws(m('1.0.0'), /New version `1\.0\.0` should be higher than current version `\d+\.\d+\.\d+`/);
+	t.throws(m('1.0.0-beta'), /New version `1\.0\.0-beta` should be higher than current version `\d+\.\d+\.\d+`/);
 });

@@ -7,6 +7,7 @@
 
 ## Why
 
+- [Interactive UI](#interactive-ui)
 - Ensures you are publishing from the `master` branch
 - Ensures the working directory is clean and that there are no unpulled changes
 - Reinstalls dependencies to ensure your project works with the latest dependency tree
@@ -36,16 +37,25 @@ $ np --help
       patch | minor | major | prepatch | preminor | premajor | prerelease | 1.2.3
 
   Options
-    --any-branch    Allow publishing from any branch
-    --skip-cleanup  Skips cleanup of node_modules
-    --yolo          Skips cleanup and testing
-    --tag           Publish under a given dist-tag
+    --any-branch  Allow publishing from any branch
+    --no-cleanup  Skips cleanup of node_modules
+    --yolo        Skips cleanup and testing
+    --no-publish  Skips publishing
+    --tag         Publish under a given dist-tag
 
   Examples
+    $ np
     $ np patch
     $ np 1.0.2
     $ np 1.0.2-beta.3 --tag=beta
 ```
+
+
+## Interactive UI
+
+Run `np` without arguments to launch the interactive UI that guides you through publishing a new version.
+
+<img src="screenshot-ui.png" width="1290">
 
 
 ## Tips
@@ -92,9 +102,27 @@ To publish [scoped packages](https://docs.npmjs.com/misc/scope#publishing-public
 }
 ```
 
+### Publish to a custom registry
+
+Set the [`registry` option](https://docs.npmjs.com/misc/config#registry) in package.json to the URL of your registry:
+
+```json
+"publishConfig":{
+	"registry": "http://my-internal-registry.local"
+}
+```
+
+### Publish with a CI
+
+If you use a Continuous Integration server to publish your tagged commits, use the `--no-publish` flag to skip the publishing step of `np`.
+
 ### Initial version
 
 For new packages, start the `version` field in package.json at `0.0.0` and let `np` bump it to `1.0.0` or `0.1.0` when publishing.
+
+### Prerequisite step runs forever on macOS Sierra
+
+If you're running macOS Sierra or higher and previously stored your Git SSH-key in the keychain (So you don't have to enter your password on every single Git command), it happens that the `prerequisite` step runs forever. This is because macOS Sierra no longer stores the SSH-key in the keychain by default, so it prompts for a password during the `prerequisite` step, but you're not able to input it. The solution is to open `~/.ssh/config` (if it doesn't exist create it), add or modify `AddKeysToAgent yes`, and save the file. To add your SSH-key to the keychain, you have to run a simple Git command like `git fetch`. Your credentials should now be stored in the keychain and you're able to use `np` again.
 
 
 ## Created by
